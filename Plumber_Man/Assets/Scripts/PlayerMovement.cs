@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator upDown;
     public float gravity = -27;
     private bool subSurf = false;
+    bool letsGo = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -94,23 +95,30 @@ public class PlayerMovement : MonoBehaviour
         
         
     }
-        void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
+        
         if (other.gameObject.CompareTag("Ground Bound"))
         {
             onGround = false;
         }
-        if (other.gameObject.CompareTag("Sub Surface Check") && subSurf)
+        if (other.gameObject.CompareTag("Sub Surface Check"))
+        {
+            subSurf = true;
+        }
+        if (other.gameObject.CompareTag("Upper Check"))
         {
             camera1.enabled = true;
             camera2.enabled = false;
             camera3.enabled = false;
-            subSurf = !subSurf;
-        }
-        else if (other.gameObject.CompareTag("Sub Surface Check"))
-        { 
-            subSurf = !subSurf;
+            subSurf = false;
         }
     }
+
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(.5f);
+    }
+
 
 }
