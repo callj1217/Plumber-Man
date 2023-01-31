@@ -10,6 +10,9 @@ TagManager:
   - Block
   - Ground Bound
   - Sub Surface Check
+  - Upper Check
+  - Enemy
+  - Head Check
   layers:
   - Default
   - TransparentFX

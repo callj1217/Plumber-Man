@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     public float gravity = -27;
     private bool subSurf = false;
     bool letsGo = true;
+    bool onBlock = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
         Physics.gravity = new Vector3(0, -27, 0);
         verticalInput = 0;
         speed = 10;
-        if (onGround)
+        if (onGround && !onBlock)
         {
             player_rb.velocity = new Vector3(0, -3, 0);
         }
@@ -75,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            speed = 20;
+            speed = 15;
         }
         
         transform.Translate(Vector3.forward * Time.deltaTime * speed * verticalInput);
@@ -85,13 +86,28 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Top Collider"))
+        if (collision.gameObject.CompareTag("Ground"))
         {
             onGround = true;
             
         }
 
-       
+        if (collision.gameObject.CompareTag("Top Collider"))
+        {
+            onBlock = true;
+            onGround = true;
+        }
+
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+        }
+        
+        if(collision.gameObject.CompareTag("Head Check"))
+        {
+            Destroy(collision.transform.parent.gameObject);
+        
+        }
         
         
     }
