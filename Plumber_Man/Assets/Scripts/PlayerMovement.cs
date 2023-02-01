@@ -16,10 +16,8 @@ public class PlayerMovement : MonoBehaviour
     public bool onGround = true;
     private Quaternion forwardRotation = new Quaternion(0,0,0,0);
     private Quaternion backwardRotation = new Quaternion(0,180,0,0);
-    private Animator upDown;
     public float gravity = -27;
     private bool subSurf = false;
-    bool letsGo = true;
     bool onBlock = false;
     // Start is called before the first frame update
     void Start()
@@ -29,7 +27,6 @@ public class PlayerMovement : MonoBehaviour
         camera1.enabled = true;
         camera2.enabled = false;
         camera3.enabled = false;
-        upDown = GameObject.Find("Block").GetComponent<Animator>();
 
 
     }
@@ -81,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
         
         transform.Translate(Vector3.forward * Time.deltaTime * speed * verticalInput);
         
-        upDown.SetBool("Bounce_bool", false);
+        
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -98,16 +95,17 @@ public class PlayerMovement : MonoBehaviour
             onGround = true;
         }
 
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy") && collision.gameObject.transform.position.y + 1 < transform.position.y)
+        {
+            Destroy(collision.gameObject);
+            player_rb.AddForce(Vector3.up * 10, ForceMode.Impulse);
+        }
+        else if (collision.gameObject.CompareTag("Enemy"))
         {
             Destroy(gameObject);
         }
         
-        if(collision.gameObject.CompareTag("Head Check"))
-        {
-            Destroy(collision.transform.parent.gameObject);
         
-        }
         
         
     }

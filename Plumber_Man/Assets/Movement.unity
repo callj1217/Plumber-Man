@@ -248,7 +248,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 172546238}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.91, y: 1.6, z: -4.2}
+  m_LocalPosition: {x: -2.91, y: 0.82, z: -5.47}
   m_LocalScale: {x: 1, y: 2.1056, z: 1}
   m_Children:
   - {fileID: 1429848472}
@@ -346,7 +346,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 190513756}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.9, y: -0.16, z: 43.68}
+  m_LocalPosition: {x: -2.9, y: -0.16, z: 51.6}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children: []
   m_Father: {fileID: 0}
@@ -607,7 +607,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 273095398}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.8917005, y: 0, z: 0.8991009}
@@ -841,7 +841,7 @@ Animator:
   m_GameObject: {fileID: 1194034410}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c252f77235288ac458a4f74ce9558ede, type: 2}
+  m_Controller: {fileID: 9100000, guid: c16a7e18896eacb4cabaceb6cd201347, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
