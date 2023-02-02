@@ -21,11 +21,18 @@ public class PlayerMovement : MonoBehaviour
     bool onBlock = false;
     public bool isBig = false;
     public bool immortal = false;
+    public bool hasFire = false;
+    public Material red;
+    public Material orange;
+    Renderer playerRender;
+    public GameObject firePrefab;
+    private float canFire;
     // Start is called before the first frame update
     void Start()
     {
         player_rb = GetComponent<Rigidbody>();
         block_rb = GameObject.Find("Block").GetComponent<Rigidbody>();
+        playerRender = GetComponent<Renderer>();
         camera1.enabled = true;
         camera2.enabled = false;
         camera3.enabled = false;
@@ -77,6 +84,16 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(1, 1.5f, 1);
         }
 
+        if (!hasFire)
+        {
+            playerRender.material = red;
+        }
+
+        if (Input.GetKeyDown(KeyCode.D) && hasFire && Time.time > canFire)
+        {
+            Instantiate(firePrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), firePrefab.transform.rotation);
+            canFire = Time.time + 1;
+        }
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
@@ -106,7 +123,14 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.localScale = new Vector3(1, 2, 1);
             isBig = true;
-            immortal = true;
+            Destroy(collision.gameObject);
+        }
+        if (collision.gameObject.CompareTag("Fire Flower"))
+        {
+            transform.localScale = new Vector3(1, 2, 1);
+            isBig = true;
+            hasFire = true;
+            playerRender.material = orange;
             Destroy(collision.gameObject);
         }
 

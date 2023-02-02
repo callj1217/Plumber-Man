@@ -39,11 +39,22 @@ public class IdleWalk : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player") && playerScript.isBig && transform.position.y + 1 > collision.gameObject.transform.position.y)
+
+        if (collision.gameObject.CompareTag("Player") && playerScript.hasFire && transform.position.y + 1 > collision.gameObject.transform.position.y)
+        {
+            backwards = !backwards;
+            playerScript.hasFire = false;
+            playerScript.immortal = true;
+            StartCoroutine(playerScript.Wait());
+        }
+        else if (collision.gameObject.CompareTag("Player") && playerScript.isBig && !playerScript.immortal && transform.position.y + 1 > collision.gameObject.transform.position.y)
         {
             backwards = !backwards;
             playerScript.isBig = false;
+            playerScript.immortal = true;
             StartCoroutine(playerScript.Wait());
         }
+
+        
     }
 }
