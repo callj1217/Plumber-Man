@@ -5,29 +5,37 @@ using UnityEngine;
 public class BlockActions : MonoBehaviour
 {
     PlayerMovement playerScript;
-    Animator blockAnim;
+    float move = 0;
+    float startPos;
     // Start is called before the first frame update
     void Start()
     {
         playerScript = GameObject.Find("Player").GetComponent<PlayerMovement>();
-        blockAnim = GetComponent<Animator>();
+        startPos = transform.position.y; 
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (playerScript.onGround)
+        transform.Translate(Vector3.up * Time.deltaTime * move);
+        if(transform.position.y < startPos)
         {
-            blockAnim.ResetTrigger("Bounce");
+            move = 0;
+            transform.position = new Vector3(transform.position.x, startPos, transform.position.z);
         }
-        
+
+        if(transform.position.y > startPos + 1)
+        {
+            move = -15;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player") && transform.position.y > collision.transform.position.y && !playerScript.onGround)
         {
-            blockAnim.SetTrigger("Bounce");
+            move = 15;
         }
     }
 }

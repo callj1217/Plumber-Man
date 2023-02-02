@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
     public float gravity = -27;
     private bool subSurf = false;
     bool onBlock = false;
+    public bool isBig = false;
+    public bool immortal = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -70,6 +72,11 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = forwardRotation;
         }
 
+        if (!isBig)
+        {
+            transform.localScale = new Vector3(1, 1.5f, 1);
+        }
+
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
@@ -95,12 +102,20 @@ public class PlayerMovement : MonoBehaviour
             onGround = true;
         }
 
+        if (collision.gameObject.CompareTag("Big Shroom"))
+        {
+            transform.localScale = new Vector3(1, 2, 1);
+            isBig = true;
+            immortal = true;
+            Destroy(collision.gameObject);
+        }
+
         if (collision.gameObject.CompareTag("Enemy") && collision.gameObject.transform.position.y + 1 < transform.position.y)
         {
             Destroy(collision.gameObject);
             player_rb.AddForce(Vector3.up * 10, ForceMode.Impulse);
         }
-        else if (collision.gameObject.CompareTag("Enemy"))
+        else if (collision.gameObject.CompareTag("Enemy") && !isBig && !immortal)
         {
             Destroy(gameObject);
         }
@@ -129,9 +144,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    IEnumerator Wait()
+    public IEnumerator Wait()
     {
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(2f);
+        immortal = false;
     }
 
 
