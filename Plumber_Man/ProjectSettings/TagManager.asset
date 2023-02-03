@@ -15,6 +15,9 @@ TagManager:
   - Head Check
   - Big Shroom
   - Fire Flower
+  - Fireball
+  - Iceball
+  - Ice Flower
   layers:
   - Default
   - TransparentFX

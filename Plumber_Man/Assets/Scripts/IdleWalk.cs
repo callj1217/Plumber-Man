@@ -10,6 +10,7 @@ public class IdleWalk : MonoBehaviour
     PlayerMovement playerScript;
     private Quaternion forwardRotation = new Quaternion(0, 0, 0, 0);
     private Quaternion backwardRotation = new Quaternion(0, 180, 0, 0);
+    public bool isFrozen;
     void Start()
     {
         playerScript = GameObject.Find("Player").GetComponent<PlayerMovement>();
@@ -39,22 +40,45 @@ public class IdleWalk : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
-        if (collision.gameObject.CompareTag("Player") && playerScript.hasFire && transform.position.y + 1 > collision.gameObject.transform.position.y)
+        if (!isFrozen)
         {
-            backwards = !backwards;
-            playerScript.hasFire = false;
-            playerScript.immortal = true;
-            StartCoroutine(playerScript.Wait());
-        }
-        else if (collision.gameObject.CompareTag("Player") && playerScript.isBig && !playerScript.immortal && transform.position.y + 1 > collision.gameObject.transform.position.y)
-        {
-            backwards = !backwards;
-            playerScript.isBig = false;
-            playerScript.immortal = true;
-            StartCoroutine(playerScript.Wait());
-        }
+            if (collision.gameObject.CompareTag("Player") && (playerScript.hasFire || playerScript.hasIce) && transform.position.y + 1 > collision.gameObject.transform.position.y)
+            {
+                backwards = !backwards;
+                playerScript.hasFire = false;
+                playerScript.hasIce = false;
+                playerScript.immortal = true;
+                StartCoroutine(playerScript.Wait());
+            }
+            else if (collision.gameObject.CompareTag("Player") && playerScript.isBig && !playerScript.immortal && transform.position.y + 1 > collision.gameObject.transform.position.y)
+            {
+                backwards = !backwards;
+                playerScript.isBig = false;
+                playerScript.immortal = true;
+                StartCoroutine(playerScript.Wait());
+            }
+            if (collision.gameObject.CompareTag("Fireball"))
+            {
+                Destroy(gameObject);
+            }
 
+            if (collision.gameObject.CompareTag("Iceball"))
+            {
+                StartCoroutine(Freeze());
+                transform.GetChild(0).gameObject.SetActive(true);
+                speed = 0;
+                isFrozen = true;
+            }
+        } 
         
+
+    }
+
+    IEnumerator Freeze()
+    {
+        yield return new WaitForSeconds(3);
+        speed = 5;
+        transform.GetChild(0).gameObject.SetActive(false);
+        isFrozen = false;
     }
 }

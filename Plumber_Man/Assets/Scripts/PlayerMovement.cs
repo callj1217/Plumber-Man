@@ -22,10 +22,13 @@ public class PlayerMovement : MonoBehaviour
     public bool isBig = false;
     public bool immortal = false;
     public bool hasFire = false;
+    public bool hasIce = false;
     public Material red;
     public Material orange;
+    public Material blue;
     Renderer playerRender;
     public GameObject firePrefab;
+    public GameObject icePrefab;
     private float canFire;
     // Start is called before the first frame update
     void Start()
@@ -84,14 +87,36 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(1, 1.5f, 1);
         }
 
-        if (!hasFire)
+        if (!hasFire && !hasIce)
         {
             playerRender.material = red;
         }
 
-        if (Input.GetKeyDown(KeyCode.D) && hasFire && Time.time > canFire)
+        if (Input.GetKeyDown(KeyCode.D) && Time.time > canFire)
         {
-            Instantiate(firePrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), firePrefab.transform.rotation);
+            if (hasFire)
+            {
+                if (transform.rotation == backwardRotation)
+                {
+                    Instantiate(firePrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), firePrefab.transform.rotation);
+                }
+                else
+                {
+                    Instantiate(firePrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), firePrefab.transform.rotation);
+                }
+            }
+
+            if (hasIce)
+            {
+                if (transform.rotation == backwardRotation)
+                {
+                    Instantiate(icePrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), icePrefab.transform.rotation);
+                }
+                else
+                {
+                    Instantiate(icePrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), icePrefab.transform.rotation);
+                }
+            }
             canFire = Time.time + 1;
         }
 
@@ -130,18 +155,35 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(1, 2, 1);
             isBig = true;
             hasFire = true;
+            hasIce = false;
             playerRender.material = orange;
             Destroy(collision.gameObject);
         }
-
-        if (collision.gameObject.CompareTag("Enemy") && collision.gameObject.transform.position.y + 1 < transform.position.y)
+        if (collision.gameObject.CompareTag("Ice Flower"))
         {
+            transform.localScale = new Vector3(1, 2, 1);
+            isBig = true;
+            hasIce = true;
+            hasFire = false;
+            playerRender.material = blue;
             Destroy(collision.gameObject);
-            player_rb.AddForce(Vector3.up * 10, ForceMode.Impulse);
+        }
+
+        if (collision.gameObject.CompareTag("Enemy") && collision.gameObject.transform.position.y + 1.67 < transform.position.y)
+        {
+            if (!collision.gameObject.GetComponent<IdleWalk>().isFrozen)
+            {
+                Destroy(collision.gameObject);
+                player_rb.AddForce(Vector3.up * 10, ForceMode.Impulse);
+            }
         }
         else if (collision.gameObject.CompareTag("Enemy") && !isBig && !immortal)
         {
-            Destroy(gameObject);
+            if (!collision.gameObject.GetComponent<IdleWalk>().isFrozen)
+            {
+                Destroy(gameObject);
+            }
+            
         }
         
         

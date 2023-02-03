@@ -6,10 +6,24 @@ public class FireIceMovement : MonoBehaviour
 {
     // Start is called before the first frame update
     Rigidbody rb;
+    PlayerMovement playerScript;
+    GameObject player;
+    float fireSpeed = 10;
+    private Quaternion forwardRotation = new Quaternion(0, 0, 0, 0);
+    private Quaternion backwardRotation = new Quaternion(0, 180, 0, 0);
     void Start()
     {
+        player = GameObject.Find("Player");
+        playerScript = player.GetComponent<PlayerMovement>();
         rb = GetComponent<Rigidbody>();
-        rb.AddForce(Vector3.forward * 10, ForceMode.Impulse);
+        if (player.transform.rotation == backwardRotation)
+        {
+            fireSpeed = -10;
+        }
+
+        rb.AddForce(Vector3.forward * fireSpeed, ForceMode.Impulse);
+
+
     }
 
     // Update is called once per frame
@@ -22,7 +36,7 @@ public class FireIceMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             rb.AddForce(Vector3.up * 8, ForceMode.Impulse);
-            rb.AddForce(Vector3.forward * 10, ForceMode.Impulse);
+            rb.AddForce(Vector3.forward * fireSpeed, ForceMode.Impulse);   
         }
 
         if (!collision.gameObject.CompareTag("Ground"))
@@ -30,9 +44,6 @@ public class FireIceMovement : MonoBehaviour
             Destroy(gameObject);
         }
 
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            Destroy(collision.gameObject);
-        }
+        
     }
 }
