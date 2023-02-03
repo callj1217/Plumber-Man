@@ -18,6 +18,7 @@ TagManager:
   - Fireball
   - Iceball
   - Ice Flower
+  - Ice
   layers:
   - Default
   - TransparentFX
